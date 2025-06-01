@@ -1,0 +1,47 @@
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+class MyHashMap {
+private:
+    static const int SIZE = 10000; 
+    vector<pair<int, int>> table[SIZE];
+
+    int hash(int key) {
+        return key % SIZE;
+    }
+
+public:
+    MyHashMap() {}
+
+    void put(int key, int value) {
+        int idx = hash(key);
+        for (auto& pair : table[idx]) {
+            if (pair.first == key) {
+                pair.second = value; 
+                return;
+            }
+        }
+        table[idx].push_back({key, value});
+    }
+
+    int get(int key) {
+        int idx = hash(key);
+        for (auto& pair : table[idx]) {
+            if (pair.first == key) return pair.second;
+        }
+        return -1;
+    }
+
+    void remove(int key) {
+        int idx = hash(key);
+        auto& bucket = table[idx];
+        for (auto it = bucket.begin(); it != bucket.end(); ++it) {
+            if (it->first == key) {
+                bucket.erase(it);
+                return;
+            }
+        }
+    }
+};
